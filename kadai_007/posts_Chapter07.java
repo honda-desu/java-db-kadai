@@ -1,5 +1,3 @@
-package kadai_007;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,50 +7,35 @@ import java.sql.Statement;
 import java.util.Date;
 
 public class posts_Chapter07 {
-
+	
 	public static void main(String[] args) {
 		
 		Connection con = null;
 		Statement statement = null;
 		
-		String[][] postList = {
-				{"1003", "2023-02-08", "昨日の夜は徹夜でした・・", "13"},
-				{"1002", "2023-02-08", "お疲れ様です！", "12"},
-				{"1003", "2023-02-09", "今日も頑張ります！", "18"},
-				{"1001", "2023-02-09", "無理は禁物ですよ！", "17"},
-				{"1002", "2023-02-10", "明日から連休ですね！", "20"}
-		};
-		
+
 		try {
 			con = DriverManager.getConnection(
 				"jdbc:mysql://localhost/challenge_java",
 				"root",
-				"password"
+				"Khonnd52&$"
 			);
 			
 			System.out.println("データベース接続成功:" + con);
 			
 			// SQLクエリを準備
-			String psql = "INSERT INTO posts (user_id, posted_at, post_content, likes) VALUES (?, ?, ?, ?);";
-			PreparedStatement pstmt = con.prepareStatement(psql);
 			
-			int totalRowCnt = 0;
-			//リストを順番に読み込む
-			int rowCnt = 0;
-			for(int i = 0; i < postList.length; i++) {
-				//?部分をリストのデータに置き換える
-				pstmt.setString(1, postList[i][0]);
-				pstmt.setString(2, postList[i][1]);
-				pstmt.setString(3, postList[i][2]);
-				pstmt.setString(4, postList[i][3]);
-				
+			String sql = "INSERT INTO posts (user_id, posted_at, post_content, likes) VALUES " +
+		              "('1003', '2023-02-08', '昨日の夜は徹夜でした・・', 13), " +
+		              "('1002', '2023-02-08', 'お疲れ様です！', 12), " +
+		              "('1003', '2023-02-09', '今日も頑張ります！', 18), " +
+		              "('1001', '2023-02-09', '無理は禁物ですよ！', 17), " +
+		              "('1002', '2023-02-10', '明日から連休ですね！', 20);";
+			
 				//SQLクエリを実行（DBMSに送信）
-			    //System.out.println("レコード追加：" + pstmt.toString());
-			    int row = pstmt.executeUpdate(); // 引数は不要
-			    //System.out.println(row + "件のレコードが追加されました");
-				totalRowCnt += row;
-			}
+			PreparedStatement pstmt = con.prepareStatement(sql);
 			System.out.println("レコードを実行します");
+			int totalRowCnt = pstmt.executeUpdate(sql);
 			System.out.println(totalRowCnt + "件のレコードが追加されました");
 			
 			//検索対象User ID
@@ -90,3 +73,6 @@ public class posts_Chapter07 {
 	}
 
 }
+
+
+
